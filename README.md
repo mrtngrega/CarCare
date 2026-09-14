@@ -9,25 +9,25 @@ Navrh :
 * Naprogramovať odhlásenie používateľa
 * Naprogramovať používateľský profil
 * Naprogramovať pridávanie, úpravu a mazanie vozidiel
-Naprogramovať zobrazenie dostupných služieb
-Naprogramovať výpočet ceny podľa veľkosti vozidla
-Naprogramovať výber dostupného termínu
-Naprogramovať vytvorenie rezervácie
-Naprogramovať zobrazenie aktuálnych rezervácií
-Naprogramovať zobrazenie histórie služieb
-Naprogramovať zobrazenie vernostných bodov
-Naprogramovať využitie vernostných bodov
+* Naprogramovať zobrazenie dostupných služieb
+* Naprogramovať výpočet ceny podľa veľkosti vozidla
+* Naprogramovať výber dostupného termínu
+* Naprogramovať vytvorenie rezervácie
+* Naprogramovať zobrazenie aktuálnych rezervácií
+* Naprogramovať zobrazenie histórie služieb
+* Naprogramovať zobrazenie vernostných bodov
+* Naprogramovať využitie vernostných bodov
 
 Človek 2 – Administrácia a ostatná funkcionalita
-Naprogramovať admin prihlasovanie a oprávnenia
-Naprogramovať správu zákazníkov
-Naprogramovať správu rezervácií
-Naprogramovať správu detailingových služieb
-Naprogramovať správu cien podľa veľkosti vozidla
-Naprogramovať pridávanie a odoberanie vernostných bodov
-Naprogramovať systém odmien
-Naprogramovať systém súťaží
-Naprogramovať pridávanie a úpravu súťaží
-Naprogramovať evidenciu účastníkov a výhercov
-Naprogramovať admin prehľad rezervácií a zákazníkov
-Naprogramovať API a databázové operácie pre admin časť
+* Naprogramovať admin prihlasovanie a oprávnenia
+* Naprogramovať správu zákazníkov
+* Naprogramovať správu rezervácií
+* Naprogramovať správu detailingových služieb
+* Naprogramovať správu cien podľa veľkosti vozidla
+* Naprogramovať pridávanie a odoberanie vernostných bodov
+* Naprogramovať systém odmien
+* Naprogramovať systém súťaží
+* Naprogramovať pridávanie a úpravu súťaží
+* Naprogramovať evidenciu účastníkov a výhercov
+* Naprogramovať admin prehľad rezervácií a zákazníkov
+* Naprogramovať API a databázové operácie pre admin časť
