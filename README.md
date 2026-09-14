@@ -5,10 +5,10 @@ Webová aplikácia CarCare Online je moderný informačný systém určený pre 
 
 Navrh : 
 Človek 1 – Zákaznícka časť
-Naprogramovať registráciu a login
-Naprogramovať odhlásenie používateľa
-Naprogramovať používateľský profil
-Naprogramovať pridávanie, úpravu a mazanie vozidiel
+* Naprogramovať registráciu a login
+* Naprogramovať odhlásenie používateľa
+* Naprogramovať používateľský profil
+* Naprogramovať pridávanie, úpravu a mazanie vozidiel
 Naprogramovať zobrazenie dostupných služieb
 Naprogramovať výpočet ceny podľa veľkosti vozidla
 Naprogramovať výber dostupného termínu
