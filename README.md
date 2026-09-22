@@ -31,23 +31,3 @@ Navrh :
 * Naprogramovať evidenciu účastníkov a výhercov
 * Naprogramovať admin prehľad rezervácií a zákazníkov
 * Naprogramovať API a databázové operácie pre admin časť
-
-CarCare/
-│
-├── app.py                  # Hlavný Python backend (spúšťací súbor)
-├── database.db             # SQLite databáza
-│
-├── templates/              # HTML súbory (Renderuje Flask)
-│   ├── index.html          # Domovská stránka
-│   ├── login.html          # Prihlásenie / Registrácia
-│   ├── profile.html        # Profil zákazníka + garáž
-│   ├── reservation.html    # Rezervačný formulár
-│   └── admin.html          # Admin panel
-│
-└── static/                 # Statické súbory
-    ├── css/
-    │   └── style.css       # Vaše štýly
-    └── js/
-        ├── main.js         # Spoločný JS
-        ├── reservation.js  # Výpočet ceny a výber termínu
-        └── admin.js        # Admin logika
