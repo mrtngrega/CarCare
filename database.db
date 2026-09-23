@@ -170,3 +170,26 @@ CREATE TABLE schedule_exceptions (
     close_time TIME,
     reason TEXT      -- napr. 'Vianoce', 'Sanitárny deň'
 );
+--------------------------------------------------
+-- ZÁKLADNÉ SEED DÁTA (Preddefinované hodnoty)
+--------------------------------------------------
+
+-- 1. Kategórie vozidiel
+INSERT INTO vehicle_categories (id, name, description) VALUES
+(1, 'Malé', 'Hatchback, malé mestské autá'),
+(2, 'Stredné', 'Sedan, Combi, Liftback'),
+(3, 'Veľké / SUV', 'SUV, MPV, Van, Offroad');
+
+-- 2. Preddefinovaný Administrátor (heslo: "AdminHeslo123!")
+INSERT INTO users (first_name, last_name, email, password_hash, phone, role) VALUES
+('Admin', 'CarCare', 'admin@carcare.sk', '$2a$12$e830/u015.kYj.g4R...priklad_hashu...', '+421900000000', 'admin');
+
+-- 3. Otváracie hodiny štúdia (Pondelok - Piatok: 08:00 - 17:00, Víkend: Zatvorené)
+INSERT INTO business_hours (day_of_week, open_time, close_time, max_concurrent_bookings, is_closed) VALUES
+(1, '08:00', '17:00', 1, 0), -- Pondelok
+(2, '08:00', '17:00', 1, 0), -- Utorok
+(3, '08:00', '17:00', 1, 0), -- Streda
+(4, '08:00', '17:00', 1, 0), -- Štvrtok
+(5, '08:00', '17:00', 1, 0), -- Piatok
+(6, '00:00', '00:00', 0, 1), -- Sobota (Zatvorené)
+(7, '00:00', '00:00', 0, 1); -- Nedeľa (Zatvorené)
