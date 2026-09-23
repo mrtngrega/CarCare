@@ -1,8 +1,36 @@
--- Zapnutie podpory pre cudzie kľúče (v SQLite predvolene vypnuté)
 PRAGMA foreign_keys = ON;
 
 --------------------------------------------------
--- 1. POUŽÍVATELIA A ROLE
+-- 1. KATAGÓRIE VEĽKOSTÍ VOZIDIEL
+--------------------------------------------------
+CREATE TABLE vehicle_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE, -- napr. 'Malé', 'Stredné', 'Veľké / SUV'
+    description TEXT
+);
+
+--------------------------------------------------
+-- 2. ČÍSELNÍK ZNAČIEK A MODELOV (Systémové nastavenie)
+--------------------------------------------------
+-- Výrobcovia áut (napr. Skoda, Volkswagen, BMW)
+CREATE TABLE brands (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+-- konkrétne modely, ktoré už v sebe majú definovanú kategóriu veľkosti
+CREATE TABLE car_models (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    brand_id INTEGER NOT NULL,
+    model_name TEXT NOT NULL,
+    category_id INTEGER NOT NULL, -- Automaticky určuje veľkosť auta
+    FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES vehicle_categories(id),
+    UNIQUE(brand_id, model_name)
+);
+
+--------------------------------------------------
+-- 3. POUŽÍVATELIA A ROLE
 --------------------------------------------------
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,55 +45,44 @@ CREATE TABLE users (
 );
 
 --------------------------------------------------
--- 2. KATAGÓRIE VEĽKOSTÍ VOZIDIEL
---------------------------------------------------
--- Napr. Small (Hatchback), Medium (Sedan/Combi), Large (SUV/Van)
-CREATE TABLE vehicle_categories (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE, -- napr. 'Malé', 'Stredné', 'Veľké / SUV'
-    description TEXT
-);
-
---------------------------------------------------
--- 3. VOZIDLÁ ZÁKAZNÍKOV
+-- 4. VOZIDLÁ ZÁKAZNÍKOV (Používateľ vyberá iba z číselníka)
 --------------------------------------------------
 CREATE TABLE vehicles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    license_plate TEXT NOT NULL, -- EČV
-    brand TEXT NOT NULL,         -- Značka (napr. BMW)
-    model TEXT NOT NULL,         -- Model (napr. M3)
-    category_id INTEGER NOT NULL,
+    model_id INTEGER NOT NULL,    -- Odkaz na konkrétny model z číselníka
+    license_plate TEXT NOT NULL, -- EČV (napr. BT123AB)
+    year INTEGER,                -- Rok výroby (voliteľné)
+    color TEXT,                  -- Farba (voliteľné)
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES vehicle_categories(id)
+    FOREIGN KEY (model_id) REFERENCES car_models(id)
 );
 
 --------------------------------------------------
--- 4. DETAILINGOVÉ SLUŽBY A DYNAMICKÝ CENNÍK
+-- 5. DETAILINGOVÉ SLUŽBY A DYNAMICKÝ CENNÍK
 --------------------------------------------------
 CREATE TABLE services (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
-    duration_minutes INTEGER NOT NULL, -- Odhadovaná dĺžka trvania
-    is_active INTEGER NOT NULL DEFAULT 1 -- 1 = aktívna, 0 = neaktívna
+    duration_minutes INTEGER NOT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1
 );
 
--- Cenník prispôsobený veľkosti vozidla
 CREATE TABLE service_prices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     service_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    points_awarded INTEGER NOT NULL DEFAULT 0, -- Získané vernostné body
+    points_awarded INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES vehicle_categories(id) ON DELETE CASCADE,
     UNIQUE(service_id, category_id)
 );
 
 --------------------------------------------------
--- 5. REZERVAČNÝ SYSTÉM
+-- 6. REZERVAČNÝ SYSTÉM
 --------------------------------------------------
 CREATE TABLE bookings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,9 +101,8 @@ CREATE TABLE bookings (
 );
 
 --------------------------------------------------
--- 6. VERNOSTNÝ SYSTÉM (ODMENY A HISTÓRIA)
+-- 7. VERNOSTNÝ SYSTÉM
 --------------------------------------------------
--- Katalóg odmien/bezplatných služieb za body
 CREATE TABLE loyalty_rewards (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -95,13 +111,12 @@ CREATE TABLE loyalty_rewards (
     is_active INTEGER NOT NULL DEFAULT 1
 );
 
--- História získania/čerpania vernostných bodov
 CREATE TABLE loyalty_transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    booking_id INTEGER, -- Môže byť NULL, ak ide o manuálny zásah admina alebo odmenu
-    reward_id INTEGER,  -- Použije sa, ak používateľ čerpal body na odmenu
-    points INTEGER NOT NULL, -- Kladné číslo = pripísanie, Záporné číslo = čerpanie
+    booking_id INTEGER,
+    reward_id INTEGER,
+    points INTEGER NOT NULL,
     description TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -110,7 +125,7 @@ CREATE TABLE loyalty_transactions (
 );
 
 --------------------------------------------------
--- 7. SÚŤAŽE
+-- 8. SÚŤAŽE
 --------------------------------------------------
 CREATE TABLE contests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,18 +133,17 @@ CREATE TABLE contests (
     description TEXT NOT NULL,
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
-    prize TEXT NOT NULL, -- Výhra/Cena
+    prize TEXT NOT NULL,
     is_active INTEGER NOT NULL DEFAULT 1
 );
 
--- Zapojenie používateľov do súťaží
 CREATE TABLE contest_entries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     contest_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     entered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    is_winner INTEGER NOT NULL DEFAULT 0, -- 1 ak vyhral
+    is_winner INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (contest_id) REFERENCES contests(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE(contest_id, user_id) -- Používateľ sa môže zapojiť iba raz
+    UNIQUE(contest_id, user_id)
 );
