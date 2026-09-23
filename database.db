@@ -147,3 +147,26 @@ CREATE TABLE contest_entries (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(contest_id, user_id)
 );
+--------------------------------------------------
+-- OTVÁRACIE HODINY ŠTÚDIA (Štandardný týždenný plán)
+--------------------------------------------------
+CREATE TABLE business_hours (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day_of_week INTEGER NOT NULL CHECK(day_of_week BETWEEN 1 AND 7), -- 1 = Pondelok, 7 = Nedeľa
+    open_time TIME NOT NULL,  -- napr. '08:00'
+    close_time TIME NOT NULL, -- napr. '17:00'
+    max_concurrent_bookings INTEGER NOT NULL DEFAULT 1, -- Koľko áut naraz zvládnu robiť
+    is_closed INTEGER NOT NULL DEFAULT 0 -- 1 = zatvorené (napr. cez víkend)
+);
+
+--------------------------------------------------
+-- VÝNIMKY Z OTVÁRACÍCH HODÍN (Sviatky, dovolenky)
+--------------------------------------------------
+CREATE TABLE schedule_exceptions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exception_date DATE NOT NULL UNIQUE, -- napr. '2026-12-24'
+    is_closed INTEGER NOT NULL DEFAULT 1, -- 1 = celodenné zatvorené
+    open_time TIME,  -- Ak sú v tento deň len upravené hodiny
+    close_time TIME,
+    reason TEXT      -- napr. 'Vianoce', 'Sanitárny deň'
+);
