@@ -41,3 +41,4 @@ Aplikácia funguje na princípe architektúry **Client-Server** a REST API:
 4. **Administrácia:**
    * Systém rozlišuje roly (`customer` a `admin`).
    * Administrátorské rozhranie umožňuje kompletnú správu (CRUD operácie) nad službami, cenníkom, rezerváciami zákazníkov a prebiehajúcimi súťažami.
+ahoj skuska skuska nigr
